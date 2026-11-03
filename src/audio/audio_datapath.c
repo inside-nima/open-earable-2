@@ -410,7 +410,7 @@ static void data_thread(void *arg1, void *arg2, void *arg3)
 					if (echo_win_fill == 0) {
 						echo_win_ts = time_stamp;
 					}
-					echo_win[echo_win_fill++] = echo_blk[2 * f]; /* inner mic */
+					echo_win[echo_win_fill++] = echo_blk[2 * f + 1]; /* inner mic = slot 1 (R); slot 0 (L) is the outer mic */
 					if (echo_win_fill < CHIRP_LEN) {
 						continue;
 					}
@@ -498,7 +498,7 @@ static void data_thread(void *arg1, void *arg2, void *arg3)
 							_ble_chunk_buf[2] = (uint8_t)_adpcm_index;
 							memset(&_ble_chunk_buf[ADPCM_HDR], 0, ADPCM_DATA_BYTES);
 						}
-						uint8_t code = adpcm_encode_sample(decimated_block[f * 2]);
+						uint8_t code = adpcm_encode_sample(decimated_block[f * 2 + 1]); /* inner mic = slot 1 */
 						uint32_t byte_i = ADPCM_HDR + (_ble_chunk_nibbles >> 1);
 						if (_ble_chunk_nibbles & 1) {
 							_ble_chunk_buf[byte_i] |= code << 4;
